@@ -1,0 +1,23 @@
+function h_TDL = TDL_calc(T,E,T_n,bandwidth)
+parameters
+
+delta_T=1/(2*bandwidth);
+max_delay=max(T_n);
+L=round(max_delay/delta_T);
+
+% k=round((max_delay*1.2)/(1/bandwidth));
+% T=1/bandwidth*(1:k);%% time vector
+
+
+received_power=(light_speed/(frequency_carrier*4*pi))^2*P_TX.*abs(E).^2;
+a=sqrt(received_power./P_TX);
+
+h_TDL=0;
+
+for i=0:L
+h_L=sum(a.*exp((-1j*2*pi*frequency_carrier).*T_n).*sinc(2*bandwidth*(T_n-i*delta_T)));
+h_TDL=h_TDL+h_L*delta(T,i*delta_T);
+end
+h_TDL=abs(h_TDL);
+end
+
